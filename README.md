@@ -1,4 +1,4 @@
-# Terra
+# Terra :earth_africa:
 
 Terra is a natural selection simulator. It simulates an ecosystem with limited resources in which all creates are
 omnivores. In order to pass their genes to their offsprings they must find the optimal set of speed, strength and
