@@ -2,17 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridManager : MonoBehaviour
+public class Map : MonoBehaviour
 {
     [SerializeField]
     private int size = 5;
-
+    [SerializeField]
+    private int creaturesCount = 5;
+    private Vector2 gridCenter;
 
     // Start is called before the first frame update
     void Start()
     {
         GenerateGrid();
         SetCamera();
+        SpawnCreatures();
     }
 
     private void GenerateGrid(){
@@ -43,8 +46,18 @@ public class GridManager : MonoBehaviour
        float gridHeight = lastChild.position.y - firstChild.position.y;
        float gridXCenter = gridWidth / 2;
        float gridYCenter = gridHeight / 2;
+       this.gridCenter = new Vector2(transform.position.x + gridXCenter, transform.position.y + gridYCenter);
        
        Camera.main.transform.position = new Vector3(transform.position.x + gridXCenter, transform.position.y + gridYCenter, -10);
        Camera.main.orthographicSize = gridHeight * 2 / 3;
+    }
+
+    private void SpawnCreatures(){
+        GameObject referenceCreature = (GameObject)Instantiate(Resources.Load("Creature"));
+        for(int i = 0; i < creaturesCount; i++){
+            GameObject creature = (GameObject) Instantiate(referenceCreature, transform);
+            creature.transform.position = this.gridCenter;
+        }
+        Destroy(referenceCreature);
     }
 }
