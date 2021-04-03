@@ -7,7 +7,7 @@ public class FoodSpawner : MonoBehaviour
     [System.Serializable]
     public class FoodItem {
         public GameObject food;
-        public float probability;
+        public int probability;
     }
 
     [SerializeField]
@@ -15,23 +15,44 @@ public class FoodSpawner : MonoBehaviour
     [SerializeField]
     private FoodItem[] foodList;
 
+    private GameObject[] foodListWithProbability;
+
     private Map mapInstance;
 
     void Start(){
         this.mapInstance = Map.instance;
-        Debug.Log(this.mapInstance);
+        this.prepareFoodListWithProbability();
         for(int i = 0; i < foodCount; i++){
             SpawnRandomFood();
         }
     }
 
+    private void prepareFoodListWithProbability(){
+        int count;
+        int probabilityCount = 0;
+        int foodListProbabilityIndex = 0;
+        GameObject food;
+        for(int k = 0; k < foodList.Length; k++){
+            probabilityCount += foodList[k].probability;
+        }
+        this.foodListWithProbability = new GameObject[probabilityCount];
+        for(int i = 0; i < foodList.Length; i++){
+            count = foodList[i].probability;
+            food = foodList[i].food;
+            for(int j = 0; j < count; j++){
+                foodListWithProbability[foodListProbabilityIndex] = food;
+                foodListProbabilityIndex++;
+            }
+        }
+    }
+
     public void SpawnRandomFood(){
-        int foodIndex = Random.Range(0, foodList.Length);
-        Debug.Log(foodList[foodIndex].food);
-        GameObject food = (GameObject) Instantiate(foodList[foodIndex].food, transform);
+        int foodIndex = Random.Range(0, foodListWithProbability.Length);
+        GameObject food = (GameObject) Instantiate(foodListWithProbability[foodIndex], transform);
         float randomXPosition = Random.Range(this.mapInstance.gridPosition["left"], this.mapInstance.gridPosition["right"]);
         float randomYPosition = Random.Range(this.mapInstance.gridPosition["bottom"], this.mapInstance.gridPosition["top"]);
         food.transform.position = new Vector3(randomXPosition, randomYPosition, food.transform.position.z);
     }
+    
 
 }
