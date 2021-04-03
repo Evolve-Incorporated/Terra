@@ -26,11 +26,20 @@ public class Creature : MonoBehaviour
     {
         if(actualState == State.Waiting ){
             NextPosition();
+            TurnAround();
             actualState = State.Moving;
         }else if(actualState == State.Moving){
             Move();
         }
 
+    }
+
+    void TurnAround(){
+        if(nextPosition.x > transform.position.x){
+            transform.rotation = Quaternion.Euler(transform.rotation.x, 180, transform.rotation.z);
+        }else{
+            transform.rotation = Quaternion.Euler(transform.rotation.x, 0, transform.rotation.z);
+        }
     }
 
     void NextPosition(){
