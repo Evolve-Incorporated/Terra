@@ -18,7 +18,6 @@ public class Creature : MonoBehaviour
     {
         actualState = State.Waiting;
         this.mapInstance = Map.instance;
-        Debug.Log(mapInstance.gridPosition);
     }
 
     // Update is called once per frame
