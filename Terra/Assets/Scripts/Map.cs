@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class Map : MonoBehaviour
 {
+
     [SerializeField]
-    private int size = 5;
+    private int size;
     [SerializeField]
-    private int creaturesCount = 5;
-    
+    private int creaturesCount;
+    [SerializeField]
+    private int foodCount;
+
     private Vector2 gridCenter;
     public static Map instance;
     public Dictionary<string, float> gridPosition;
@@ -19,15 +22,15 @@ public class Map : MonoBehaviour
             return;
         }
         instance = this;
+        GenerateGrid();
+        SetGridPosition();
+        SpawnCreatures();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        GenerateGrid();
-        SetGridPosition();
         SetCamera();
-        SpawnCreatures();
     }
 
     private void SetGridPosition(){
