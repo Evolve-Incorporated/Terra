@@ -8,14 +8,43 @@ public class Map : MonoBehaviour
     private int size = 5;
     [SerializeField]
     private int creaturesCount = 5;
+    
     private Vector2 gridCenter;
+    public static Map instance;
+    public Dictionary<string, float> gridPosition;
+
+    void Awake(){
+        if(instance != null){
+            Debug.LogError("More than one mapr in scene!");
+            return;
+        }
+        instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
         GenerateGrid();
+        SetGridPosition();
         SetCamera();
         SpawnCreatures();
+    }
+
+    private void SetGridPosition(){
+        this.gridPosition = new Dictionary<string, float>();
+        Transform firstChild = transform.GetChild(0);
+        Transform lastChild = transform.GetChild(transform.childCount - 1);
+        float gridWidth = lastChild.position.x - firstChild.position.x;
+        float gridHeight = lastChild.position.y - firstChild.position.y;
+        float gridXCenter = gridWidth / 2;
+        float gridYCenter = gridHeight / 2;
+        this.gridCenter = new Vector2(transform.position.x + gridXCenter, transform.position.y + gridYCenter);
+        this.gridPosition.Add("left", firstChild.position.x);
+        this.gridPosition.Add("right", lastChild.position.x);
+        this.gridPosition.Add("bottom", firstChild.position.y);
+        this.gridPosition.Add("top", lastChild.position.y);
+        this.gridPosition.Add("width", gridWidth);
+        this.gridPosition.Add("height", gridHeight);
     }
 
     private void GenerateGrid(){
@@ -33,23 +62,14 @@ public class Map : MonoBehaviour
         }
 
         Destroy(referenceTile);
-
         float gridW = size;
         float gridH = size;
         transform.position = new Vector2(-gridW / 2 , gridH / 2);
     }
 
     private void SetCamera(){
-       Transform firstChild = transform.GetChild(0);
-       Transform lastChild = transform.GetChild(transform.childCount - 1);
-       float gridWidth = lastChild.position.x - firstChild.position.x;
-       float gridHeight = lastChild.position.y - firstChild.position.y;
-       float gridXCenter = gridWidth / 2;
-       float gridYCenter = gridHeight / 2;
-       this.gridCenter = new Vector2(transform.position.x + gridXCenter, transform.position.y + gridYCenter);
-       
-       Camera.main.transform.position = new Vector3(transform.position.x + gridXCenter, transform.position.y + gridYCenter, -10);
-       Camera.main.orthographicSize = gridHeight * 2 / 3;
+       Camera.main.transform.position = new Vector3(this.gridCenter.x, this.gridCenter.y, -10);
+       Camera.main.orthographicSize = gridPosition["height"] * 2 / 3;
     }
 
     private void SpawnCreatures(){

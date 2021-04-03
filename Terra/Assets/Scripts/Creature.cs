@@ -9,7 +9,6 @@ public class Creature : MonoBehaviour
 
     enum State {Waiting, Moving}
     private State actualState;
-
     private Vector3 nextPosition;
 
     // Start is called before the first frame update
