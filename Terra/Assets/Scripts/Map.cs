@@ -7,12 +7,7 @@ public class Map : MonoBehaviour
 
     [SerializeField]
     private int size;
-    [SerializeField]
-    private int creaturesCount;
-    [SerializeField]
-    private int foodCount;
 
-    private Vector2 gridCenter;
     public static Map instance;
     public Dictionary<string, float> gridPosition;
 
@@ -24,7 +19,6 @@ public class Map : MonoBehaviour
         instance = this;
         GenerateGrid();
         SetGridPosition();
-        SpawnCreatures();
     }
 
     // Start is called before the first frame update
@@ -39,15 +33,16 @@ public class Map : MonoBehaviour
         Transform lastChild = transform.GetChild(transform.childCount - 1);
         float gridWidth = lastChild.position.x - firstChild.position.x;
         float gridHeight = lastChild.position.y - firstChild.position.y;
-        float gridXCenter = gridWidth / 2;
-        float gridYCenter = gridHeight / 2;
-        this.gridCenter = new Vector2(transform.position.x + gridXCenter, transform.position.y + gridYCenter);
+        float gridXCenter = (gridWidth / 2) + transform.position.x;
+        float gridYCenter = (gridHeight / 2) + transform.position.y;
         this.gridPosition.Add("left", firstChild.position.x);
         this.gridPosition.Add("right", lastChild.position.x);
         this.gridPosition.Add("bottom", firstChild.position.y);
         this.gridPosition.Add("top", lastChild.position.y);
         this.gridPosition.Add("width", gridWidth);
         this.gridPosition.Add("height", gridHeight);
+        this.gridPosition.Add("xCenter", gridXCenter);
+        this.gridPosition.Add("yCenter", gridYCenter);
     }
 
     private void GenerateGrid(){
@@ -71,16 +66,7 @@ public class Map : MonoBehaviour
     }
 
     private void SetCamera(){
-       Camera.main.transform.position = new Vector3(this.gridCenter.x, this.gridCenter.y, -10);
+       Camera.main.transform.position = new Vector3(this.gridPosition["xCenter"], this.gridPosition["yCenter"], -10);
        Camera.main.orthographicSize = gridPosition["height"] * 2 / 3;
-    }
-
-    private void SpawnCreatures(){
-        GameObject referenceCreature = (GameObject)Instantiate(Resources.Load("Creature"));
-        for(int i = 0; i < creaturesCount; i++){
-            GameObject creature = (GameObject) Instantiate(referenceCreature, transform);
-            creature.transform.position = this.gridCenter;
-        }
-        Destroy(referenceCreature);
     }
 }
