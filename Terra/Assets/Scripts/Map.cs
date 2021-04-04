@@ -5,8 +5,18 @@ using UnityEngine;
 public class Map : MonoBehaviour
 {
 
+    [System.Serializable]
+    public class TileItem {
+        public GameObject tile;
+        public int probability;
+    }
+
     [SerializeField]
     private int size;
+    [SerializeField]
+    private TileItem[] tileList;
+
+
 
     public static Map instance;
     public Dictionary<string, float> gridPosition;
@@ -46,20 +56,19 @@ public class Map : MonoBehaviour
     }
 
     private void GenerateGrid(){
-        GameObject referenceTile = (GameObject)Instantiate(Resources.Load("GrassTile"));
 
         for(int row = 0; row < size; row++){
             for(int col = 0; col < size; col++){
-                GameObject tile = (GameObject) Instantiate(referenceTile, transform);
+                int tileIndex = Random.Range(0, tileList.Length);
+                GameObject tile = (GameObject) Instantiate(tileList[tileIndex].tile, transform);
 
                 float posX = col;
                 float posY = row;
 
                 tile.transform.position = new Vector2(posX, posY);
+                tile.transform.rotation =  Quaternion.Euler(Random.Range(0, 1) == 0 ? 0 : 180, Random.Range(0, 1) == 0 ? 0 : 180, tile.transform.rotation.z);
             }
         }
-
-        Destroy(referenceTile);
         float gridW = size;
         float gridH = size;
         transform.position = new Vector2(-gridW / 2 , gridH / 2);
