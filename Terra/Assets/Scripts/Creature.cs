@@ -6,6 +6,8 @@ public class Creature : MonoBehaviour
 {
     [SerializeField]
     private float speed = 3f;
+    [SerializeField]
+    private float energy = 20f;
 
     enum State {Waiting, Moving}
     private State actualState;
@@ -29,6 +31,11 @@ public class Creature : MonoBehaviour
             actualState = State.Moving;
         }else if(actualState == State.Moving){
             Move();
+        }
+        
+        energy = energy - Time.deltaTime * 5;
+        if(energy <= 0){
+            die();
         }
 
     }
@@ -68,5 +75,9 @@ public class Creature : MonoBehaviour
         {
             actualState = State.Waiting;
         }
+    }
+
+    void die(){
+        Destroy(gameObject);
     }
 }
