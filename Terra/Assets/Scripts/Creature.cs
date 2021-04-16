@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +7,8 @@ public class Creature : MonoBehaviour
     [SerializeField]
     private float speed = 3f;
     [SerializeField]
+    public float range = 1f;
+    [SerializeField]
     private float energy = 20f;
 
     enum State {Waiting, Moving}
@@ -14,13 +16,40 @@ public class Creature : MonoBehaviour
     private Vector3 nextPosition;
     private Map mapInstance;
     private float mapOffset = 0.5f;
+    private string foodTag = "Food";
+
+    public Transform target;
 
     // Start is called before the first frame update
     void Start()
     {
         actualState = State.Waiting;
         this.mapInstance = Map.instance;
+        InvokeRepeating("UpdateTarget", 0f, 0.5f);
     }
+
+    void UpdateTarget(){
+        GameObject[] foodList = GameObject.FindGameObjectsWithTag(foodTag);
+        float shortestDistance = Mathf.Infinity;
+        GameObject nearestFood = null;
+        foreach(GameObject food in foodList){
+            float distanceToFood = Vector3.Distance(transform.position, food.transform.position);
+            if(distanceToFood < shortestDistance){
+                shortestDistance = distanceToFood;
+                nearestFood = food;
+            }
+        }
+
+        if(nearestFood != null && shortestDistance <= range){
+            target = nearestFood.transform;
+            this.nextPosition = new Vector3(target.position.x, target.position.y, transform.position.z);
+            TurnAround();
+            actualState = State.Moving;
+        }else{
+            target = null;
+        }
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -74,7 +103,17 @@ public class Creature : MonoBehaviour
         if(Vector2.Distance(transform.position, nextPosition) <= 0.2f)
         {
             actualState = State.Waiting;
+            if(target && Vector2.Distance(transform.position, target.position) <= 0.2f){
+                energy = energy + target.gameObject.GetComponent<Food>().GetEnergy();
+                target.gameObject.GetComponent<Food>().Consume();
+                target = null;
+            }
         }
+    }
+
+    private void OnDrawGizmosSelected() {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, range);
     }
 
     void die(){
