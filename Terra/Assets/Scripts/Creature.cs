@@ -66,8 +66,8 @@ public class Creature : MonoBehaviour
     }
 
     void NextPosition(){
-        float xPositionRandom = Random.Range(-5f, 5f);
-        float yPositionRandom = Random.Range(-5f, 5f);
+        float xPositionRandom = Random.Range(-10f, 10f);
+        float yPositionRandom = Random.Range(-10f, 10f);
         Vector2 nextPossiblePosition = new Vector2(transform.position.x + xPositionRandom, transform.position.y + yPositionRandom);
         if(nextPossiblePosition.x > this.mapInstance.gridPosition["right"] - mapOffset){
             nextPossiblePosition.x = this.mapInstance.gridPosition["right"] - mapOffset;
@@ -122,7 +122,13 @@ public class Creature : MonoBehaviour
     }
 
     void Reproduce(){
-        creatureSpawnerInstance.SpawnCreature(transform.position);
+        /*
+            TO DO
+            Do mutation here
+        */
+
+        CreatureJson creatureJson = new CreatureJson(this.speed, this.range, 50, this.reproduceCost, this.tendencyToReproduce);
+        creatureSpawnerInstance.SpawnCreature(transform.position, creatureJson);
         energy = energy - reproduceCost;
     }
 
@@ -133,5 +139,13 @@ public class Creature : MonoBehaviour
 
     private void die(){
         Destroy(gameObject);
+    }
+
+    public void SetStatistics(CreatureJson creatureJson){
+        this.speed = creatureJson.getSpeed();
+        this.range = creatureJson.getRange();
+        this.energy = creatureJson.getEnergy();
+        this.reproduceCost = creatureJson.getReproduceCost();
+        this.tendencyToReproduce = creatureJson.getTendencyToReproduce();
     }
 }

@@ -35,13 +35,16 @@ public class CreatureSpawner : MonoBehaviour
         float randomXPosition = Random.Range(this.mapInstance.gridPosition["left"], this.mapInstance.gridPosition["right"]);
         float randomYPosition = Random.Range(this.mapInstance.gridPosition["bottom"], this.mapInstance.gridPosition["top"]);
         creature.transform.position = new Vector3(randomXPosition, randomYPosition, creature.transform.position.z);
+        CreatureJson randomCreatureJson = CreatureJson.getRandom();
+        creature.GetComponent<Creature>().SetStatistics(randomCreatureJson);
         return creature;
     }
 
-    public GameObject SpawnCreature(Vector3 position){
+    public GameObject SpawnCreature(Vector3 position, CreatureJson creatureJson){
         int creatureIndex = Random.Range(0, creatures.Length);
         GameObject creature = (GameObject) Instantiate(creatures[creatureIndex], transform);
         creature.transform.position = new Vector3(position.x, position.y, position.z);
+        creature.GetComponent<Creature>().SetStatistics(creatureJson);
         return creature;
     }
 }
