@@ -5,16 +5,22 @@ using UnityEngine;
 public class Creature : MonoBehaviour
 {
     [SerializeField]
-    private float speed = 3f;
+    private float speed;
     [SerializeField]
-    public float range = 1f;
+    private float range;
     [SerializeField]
-    private float energy = 20f;
+    private float energy;
+    [SerializeField]
+    private float reproduceCost;
+    [SerializeField]
+    private float tendencyToReproduce;
+
 
     enum State {Waiting, Moving}
     private State actualState;
     private Vector3 nextPosition;
     private Map mapInstance;
+    private CreatureSpawner creatureSpawnerInstance;
     private float mapOffset = 0.5f;
     private string foodTag = "Food";
 
@@ -25,31 +31,9 @@ public class Creature : MonoBehaviour
     {
         actualState = State.Waiting;
         this.mapInstance = Map.instance;
+        creatureSpawnerInstance = CreatureSpawner.instance;
         InvokeRepeating("UpdateTarget", 0f, 0.5f);
     }
-
-    void UpdateTarget(){
-        GameObject[] foodList = GameObject.FindGameObjectsWithTag(foodTag);
-        float shortestDistance = Mathf.Infinity;
-        GameObject nearestFood = null;
-        foreach(GameObject food in foodList){
-            float distanceToFood = Vector3.Distance(transform.position, food.transform.position);
-            if(distanceToFood < shortestDistance){
-                shortestDistance = distanceToFood;
-                nearestFood = food;
-            }
-        }
-
-        if(nearestFood != null && shortestDistance <= range){
-            target = nearestFood.transform;
-            this.nextPosition = new Vector3(target.position.x, target.position.y, transform.position.z);
-            TurnAround();
-            actualState = State.Moving;
-        }else{
-            target = null;
-        }
-    }
-
 
     // Update is called once per frame
     void Update()
@@ -65,6 +49,10 @@ public class Creature : MonoBehaviour
         energy = energy - Time.deltaTime * 5;
         if(energy <= 0){
             die();
+        }
+
+        if(energy >= reproduceCost * tendencyToReproduce){
+            Reproduce();
         }
 
     }
@@ -111,12 +99,39 @@ public class Creature : MonoBehaviour
         }
     }
 
+    void UpdateTarget(){
+        GameObject[] foodList = GameObject.FindGameObjectsWithTag(foodTag);
+        float shortestDistance = Mathf.Infinity;
+        GameObject nearestFood = null;
+        foreach(GameObject food in foodList){
+            float distanceToFood = Vector3.Distance(transform.position, food.transform.position);
+            if(distanceToFood < shortestDistance){
+                shortestDistance = distanceToFood;
+                nearestFood = food;
+            }
+        }
+
+        if(nearestFood != null && shortestDistance <= range){
+            target = nearestFood.transform;
+            this.nextPosition = new Vector3(target.position.x, target.position.y, transform.position.z);
+            TurnAround();
+            actualState = State.Moving;
+        }else{
+            target = null;
+        }
+    }
+
+    void Reproduce(){
+        creatureSpawnerInstance.SpawnCreature(transform.position);
+        energy = energy - reproduceCost;
+    }
+
     private void OnDrawGizmosSelected() {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, range);
     }
 
-    void die(){
+    private void die(){
         Destroy(gameObject);
     }
 }
