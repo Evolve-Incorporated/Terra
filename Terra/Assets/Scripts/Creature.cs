@@ -40,6 +40,9 @@ public class Creature : MonoBehaviour
 
         if(nearestFood != null && shortestDistance <= range){
             target = nearestFood.transform;
+            this.nextPosition = new Vector3(target.position.x, target.position.y, transform.position.z);
+            TurnAround();
+            actualState = State.Moving;
         }else{
             target = null;
         }
