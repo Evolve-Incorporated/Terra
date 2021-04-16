@@ -18,6 +18,15 @@ public class FoodSpawner : MonoBehaviour
     private GameObject[] foodListWithProbability;
 
     private Map mapInstance;
+    public static FoodSpawner instance;
+
+    void Awake(){
+        if(instance != null){
+            Debug.LogError("More than one food spawner in scene!");
+            return;
+        }
+        instance = this;
+    }
 
     void Start(){
         this.mapInstance = Map.instance;

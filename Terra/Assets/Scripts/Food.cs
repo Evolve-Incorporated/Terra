@@ -10,7 +10,14 @@ public class Food : MonoBehaviour
     [SerializeField]
     private float probability;
 
+    private FoodSpawner foodSpawnerInstance;
+    void Start()
+    {
+        foodSpawnerInstance = FoodSpawner.instance;
+    }
+
     public void Consume(){
+        foodSpawnerInstance.SpawnRandomFood();
         Destroy(gameObject);
     }
 
