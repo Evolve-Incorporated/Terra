@@ -7,7 +7,7 @@ public class Creature : MonoBehaviour
     [SerializeField]
     private float speed = 3f;
     [SerializeField]
-    public float range = 5f;
+    public float range = 1f;
 
     enum State {Waiting, Moving}
     private State actualState;
@@ -59,7 +59,6 @@ public class Creature : MonoBehaviour
         }else if(actualState == State.Moving){
             Move();
         }
-
     }
 
     void TurnAround(){
@@ -96,7 +95,16 @@ public class Creature : MonoBehaviour
         if(Vector2.Distance(transform.position, nextPosition) <= 0.2f)
         {
             actualState = State.Waiting;
+            if(target && Vector2.Distance(transform.position, target.position) <= 0.2f){
+                target.gameObject.GetComponent<Food>().Consume();
+                target = null;
+            }
         }
+    }
+
+    private void OnDrawGizmosSelected() {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, range);
     }
 
 }

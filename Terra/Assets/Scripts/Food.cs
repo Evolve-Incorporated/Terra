@@ -9,4 +9,12 @@ public class Food : MonoBehaviour
     private float energy;
     [SerializeField]
     private float probability;
+
+    public void Consume(){
+        Destroy(gameObject);
+    }
+
+    public float GetEnergy(){
+        return energy;
+    }
 }
