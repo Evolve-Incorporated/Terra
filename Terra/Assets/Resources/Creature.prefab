@@ -623,6 +623,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 4
+  range: 3
+  target: {fileID: 0}
+  energy: 20
 --- !u!1 &4770201108060966360
 GameObject:
   m_ObjectHideFlags: 0
