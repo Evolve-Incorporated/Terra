@@ -214,6 +214,8 @@ GameObject:
   m_Component:
   - component: {fileID: 662692546}
   - component: {fileID: 662692548}
+  - component: {fileID: 662692547}
+  - component: {fileID: 662692545}
   m_Layer: 0
   m_Name: Map
   m_TagString: Untagged
@@ -221,6 +223,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &662692545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662692544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca3a7f901046cf3468a286386547f759, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  creaturesCount: 40
+  creatures:
+  - {fileID: 4770108447419574286, guid: f4b8603e922db7847aa88a6a8635be41, type: 3}
 --- !u!4 &662692546
 Transform:
   m_ObjectHideFlags: 0
@@ -235,6 +252,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &662692547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662692544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d26cf505ac9d8c4d8ca21e7f1f6efd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  foodCount: 40
+  foodList:
+  - food: {fileID: 5184525876957295959, guid: 3cfb467669b55644e8bc433550b27508, type: 3}
+    probability: 8
+  - food: {fileID: 4455846206429798338, guid: 78fcb1fde7dcd514eb788d115cfe64f4, type: 3}
+    probability: 5
 --- !u!114 &662692548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -247,5 +282,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d59982e4e1e4d345a773155f7008798, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: 20
-  creaturesCount: 1
+  size: 30
