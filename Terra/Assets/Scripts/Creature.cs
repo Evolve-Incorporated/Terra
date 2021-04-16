@@ -8,6 +8,8 @@ public class Creature : MonoBehaviour
     private float speed = 3f;
     [SerializeField]
     public float range = 1f;
+    [SerializeField]
+    private float energy = 20f;
 
     enum State {Waiting, Moving}
     private State actualState;
@@ -59,6 +61,12 @@ public class Creature : MonoBehaviour
         }else if(actualState == State.Moving){
             Move();
         }
+        
+        energy = energy - Time.deltaTime * 5;
+        if(energy <= 0){
+            die();
+        }
+
     }
 
     void TurnAround(){
@@ -107,4 +115,7 @@ public class Creature : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, range);
     }
 
+    void die(){
+        Destroy(gameObject);
+    }
 }
