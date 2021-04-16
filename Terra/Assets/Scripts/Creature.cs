@@ -104,6 +104,7 @@ public class Creature : MonoBehaviour
         {
             actualState = State.Waiting;
             if(target && Vector2.Distance(transform.position, target.position) <= 0.2f){
+                energy = energy + target.gameObject.GetComponent<Food>().GetEnergy();
                 target.gameObject.GetComponent<Food>().Consume();
                 target = null;
             }
