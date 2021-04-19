@@ -22,6 +22,6 @@ public class Food : MonoBehaviour
     }
 
     public float GetEnergy(){
-        return energy;
+        return energy * 10; // tak testuje bo nie wiem gdzie to sie inicjalizuje wgl
     }
 }

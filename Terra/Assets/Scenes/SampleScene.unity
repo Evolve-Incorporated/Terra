@@ -235,7 +235,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca3a7f901046cf3468a286386547f759, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  creaturesCount: 40
+  creaturesCount: 1
   creatures:
   - {fileID: 4770108447419574286, guid: f4b8603e922db7847aa88a6a8635be41, type: 3}
 --- !u!4 &662692546

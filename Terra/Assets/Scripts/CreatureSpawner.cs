@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CreatureSpawner : MonoBehaviour
 {
+
     [SerializeField]
     private int creaturesCount;
     [SerializeField]
@@ -35,16 +36,24 @@ public class CreatureSpawner : MonoBehaviour
         float randomXPosition = Random.Range(this.mapInstance.gridPosition["left"], this.mapInstance.gridPosition["right"]);
         float randomYPosition = Random.Range(this.mapInstance.gridPosition["bottom"], this.mapInstance.gridPosition["top"]);
         creature.transform.position = new Vector3(randomXPosition, randomYPosition, creature.transform.position.z);
-        CreatureJson randomCreatureJson = CreatureJson.getRandom();
-        creature.GetComponent<Creature>().SetStatistics(randomCreatureJson);
+        
+        Creature creatureComponent = creature.GetComponent<Creature>(); 
+        creatureComponent.SetDNA(new DNA()); // tutaj dna kriczera jest ustawiane na puste
+        DNA.RandomizeCreatureDNA(creatureComponent); // tutaj geny są randomowane
+        creatureComponent.RefillEnergy(); // tutaj energia kriczera jest ustawiana na wartosc rowna genowi maxEnergy
+
         return creature;
     }
 
-    public GameObject SpawnCreature(Vector3 position, CreatureJson creatureJson){
+    public GameObject SpawnCreature(Vector3 position, DNA dna){
         int creatureIndex = Random.Range(0, creatures.Length);
         GameObject creature = (GameObject) Instantiate(creatures[creatureIndex], transform);
         creature.transform.position = new Vector3(position.x, position.y, position.z);
-        creature.GetComponent<Creature>().SetStatistics(creatureJson);
+
+        Creature creatureComponent = creature.GetComponent<Creature>();
+        creatureComponent.SetDNA(new DNA(dna)); // tutaj dna kriczera jest ustawiane na kopie dna podanego w argumencie
+        creatureComponent.RefillEnergy(); // tutaj energia kriczera jest ustawiana na wartosc rowna genowi maxEnergy
+
         return creature;
     }
 }
