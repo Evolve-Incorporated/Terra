@@ -5,12 +5,12 @@ using UnityEngine;
 public class Creature : MonoBehaviour
 {
 
-    [SerializeField]
     private float energy;
+    [SerializeField]
+    public int id;
 
     [SerializeField]
     private DNA dna;
-
 
     enum State {Waiting, Moving}
     private State actualState;
@@ -42,7 +42,7 @@ public class Creature : MonoBehaviour
             Move();
         }
         
-        energy = energy - Time.deltaTime * dna.GetReproductionCost(); 
+        BurnEnergy(Time.deltaTime * dna.GetReproductionCost()); 
         if(energy <= 0){
             die();
         }
@@ -92,7 +92,6 @@ public class Creature : MonoBehaviour
                 target = null;
                 
                 if(energy >= dna.GetReproductionCost()){
-                    //Debug.Log("Energy: " + energy.ToString() + " Cost: " + dna.GetReproductionCost().ToString());
                     Reproduce();
                 }
             }
@@ -122,14 +121,15 @@ public class Creature : MonoBehaviour
     }
     
     void Reproduce() {
+        Debug.Log(id + ". Reproducing");
+        BurnEnergy(dna.GetReproductionCost(), "Reprodukcja");
+
         GameObject creature = creatureSpawnerInstance.SpawnCreature(transform.position, dna);
+
         Creature creatureComponent = creature.GetComponent<Creature>();
-        
         creatureComponent.Mutate();
-        creatureComponent.RefillEnergy();
-        Debug.Log("Reproducing:\n" + dna + "\nEnergy: " + energy + "\n\nInto:\n" + creatureComponent.GetDNA() + "\nEnergy: " + creatureComponent.energy);
-        
-        energy -= dna.GetReproductionCost();
+        //Debug.Log("Reproducing:\n" + dna + "\nEnergy: " + energy + "\n\nInto:\n" + creatureComponent.GetDNA() + "\nEnergy: " + creatureComponent.energy);
+        Debug.Log(creatureComponent.id + "." + " New creature energy: " + creatureComponent.energy);
     }
 
     void Mutate() {
@@ -141,7 +141,13 @@ public class Creature : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, dna.getGene("range"));
     }
 
+    void BurnEnergy(float amount, string message = null) {
+        if (message != null) Debug.Log(id + ". " + "[" + message + "]" + "Zabrano " + energy + " energii.");
+        energy -= amount;
+    }
+
     private void die(){
+        Debug.Log(id + ". " + "Umarł, miał " + energy + " energii.");
         Destroy(gameObject);
     }
 

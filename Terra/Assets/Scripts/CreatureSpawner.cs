@@ -10,6 +10,8 @@ public class CreatureSpawner : MonoBehaviour
     [SerializeField]
     private GameObject[] creatures;
 
+
+    private int idCounter;
     private Map mapInstance;
     public static CreatureSpawner instance;
 
@@ -24,6 +26,7 @@ public class CreatureSpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        idCounter = 0;
         this.mapInstance = Map.instance;
         for(int i = 0; i < creaturesCount; i++){
             SpawnCreature();
@@ -32,15 +35,21 @@ public class CreatureSpawner : MonoBehaviour
 
     public GameObject SpawnCreature(){
         int creatureIndex = Random.Range(0, creatures.Length);
+
         GameObject creature = (GameObject) Instantiate(creatures[creatureIndex], transform);
-        float randomXPosition = Random.Range(this.mapInstance.gridPosition["left"], this.mapInstance.gridPosition["right"]);
-        float randomYPosition = Random.Range(this.mapInstance.gridPosition["bottom"], this.mapInstance.gridPosition["top"]);
-        creature.transform.position = new Vector3(randomXPosition, randomYPosition, creature.transform.position.z);
-        
+
         Creature creatureComponent = creature.GetComponent<Creature>(); 
         creatureComponent.SetDNA(new DNA()); // tutaj dna kriczera jest ustawiane na puste
         DNA.RandomizeCreatureDNA(creatureComponent); // tutaj geny są randomowane
         creatureComponent.RefillEnergy(); // tutaj energia kriczera jest ustawiana na wartosc rowna genowi maxEnergy
+
+        idCounter += 1;
+        creatureComponent.id = idCounter;
+
+        float randomXPosition = Random.Range(this.mapInstance.gridPosition["left"], this.mapInstance.gridPosition["right"]);
+        float randomYPosition = Random.Range(this.mapInstance.gridPosition["bottom"], this.mapInstance.gridPosition["top"]);
+        creature.transform.position = new Vector3(randomXPosition, randomYPosition, creature.transform.position.z);
+        
 
         return creature;
     }
@@ -53,6 +62,9 @@ public class CreatureSpawner : MonoBehaviour
         Creature creatureComponent = creature.GetComponent<Creature>();
         creatureComponent.SetDNA(new DNA(dna)); // tutaj dna kriczera jest ustawiane na kopie dna podanego w argumencie
         creatureComponent.RefillEnergy(); // tutaj energia kriczera jest ustawiana na wartosc rowna genowi maxEnergy
+
+        idCounter += 1;
+        creatureComponent.id = idCounter;
 
         return creature;
     }
