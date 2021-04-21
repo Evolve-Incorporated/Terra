@@ -40,7 +40,7 @@ public class GeneticAlgorithm : MonoBehaviour
             generation.End();
             generation = generation.Next();
             generation.Run();
-        }
+        } 
         
     }
 }

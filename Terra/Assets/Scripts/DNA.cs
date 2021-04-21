@@ -18,7 +18,7 @@ public class DNA  {
         //key, maxValue
         { "maxEnergy", 5f }, // max energia jaką bedzie miał stworek, na początku jak się go stworzy trzeba bedzie przypisać jego energii tą wartość
         { "speed", 10f }, 
-        { "range", 10f },
+        { "range", 20f },
         { "reproductionCost", 1f},
         { "mutationRange", 0.1f}
     };
@@ -62,7 +62,6 @@ public class DNA  {
     }
 
     public void SetGene(string gene, float value) {
-        Debug.Log("Set speed to " + value);
         genes[gene] = value;
     }
 
@@ -75,7 +74,7 @@ public class DNA  {
     }
 
     public float GetMoveCost() {
-        return 0.5f * (getGene("maxEnergy")*0.5f + getGene("speed")*0.2f + getGene("range")*0.3f);// / getGene("reproductionCost"); // tu trzeba uwzglednic jescze jakos maxEnergy bo jak to nie przyczynia sie do zwiekszenia kosztu to kazdy stworek bedzie dazyl do maksymalnej wartosci
+        return 0.2f * (getGene("maxEnergy")*0.5f + getGene("speed")*0.2f + getGene("range")*0.3f);// / getGene("reproductionCost"); // tu trzeba uwzglednic jescze jakos maxEnergy bo jak to nie przyczynia sie do zwiekszenia kosztu to kazdy stworek bedzie dazyl do maksymalnej wartosci
     }
 
     public Dictionary<string, float> getGenes() {
@@ -102,6 +101,26 @@ public class DNA  {
         }
         //Debug.Log(info + "\n");
     }
+
+
+    public DNA Crossover(DNA sourceDNA, float ratio = 0.5f) {
+        DNA crossedDNA = new DNA();
+        int splitSize = (int) Mathf.Round(genes.Keys.Count * ratio);
+        
+        int i = 0;
+        foreach (string gene in genes.Keys) {
+            if (i <= splitSize) crossedDNA.SetGene(gene, genes[gene]);
+            else crossedDNA.SetGene(gene, sourceDNA.genes[gene]);
+            i++;
+        }
+
+        return crossedDNA;
+    }
+
+    public List<DNA> CrossoverBothWays(DNA sourceDNA, float ratio = 0.5f) {
+        return new List<DNA>() { Crossover(sourceDNA, ratio), sourceDNA.Crossover(this, ratio) };
+    }
+
 
     public Dictionary<string, float> Clone() {
         Dictionary<string, float> newGenes = new Dictionary<string, float>();

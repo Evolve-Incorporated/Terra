@@ -27,12 +27,13 @@ public class Generation
     }
 
     public void Run() {
+        Debug.Log("Starting generation " + number);
         LoadDNAList();
-        Debug.Log("Starting generation " + number + ". Number of DNAs: " + DNAList.Count);
         if (number != 0) {
             Selection();
             Reproduction();
         }
+        fillDNAList();
         ResetDNAScores();
         SpawnCreatures();
     }
@@ -42,41 +43,41 @@ public class Generation
         return DNAList.OrderByDescending(dna => dna.score).ToList();
     }
 
+
     public void FilterZeroDNAs() {
         DNAList = DNAList.Where(dna => dna.score > 0).ToList();
     }
 
+    public void fillDNAList() {
+        int count = DNAList.Count;
+        for (int i = 0; i < CreatureSpawner.instance.creaturesCount - count; i++) DNAList.Add(DNA.RandomDNA());
+        Debug.Log("Added random DNAs. [" + DNAList.Count + "/" + CreatureSpawner.instance.creaturesCount +  "]");
+    }
 
     public void LoadDNAList() {
         if (prevGeneration != null) {
             prevGeneration.FilterZeroDNAs();
-            DNAList = prevGeneration.survivorsDNA;
-            if (prevGeneration.DNAList.Count > 0) Debug.Log("Previous Gen best score: " + prevGeneration.GetSortedDNAList()[0].score);
-            else Debug.Log("All previous DNAs were dogshit");
+            if (prevGeneration.survivorsDNA.Count > 0) {
+                DNAList = prevGeneration.survivorsDNA;
+                Debug.Log("Selected " + DNAList.Count + " survivor DNAs to pass to next generation. Best score was: " + prevGeneration.GetSortedDNAList()[0].score);
+            }
         }
-        Debug.Log("Selected " + DNAList.Count + " survivor DNAs to pass to next generation.");
+
+        
         if (DNAList.Count == 0) {
-            Debug.Log("No creatures in population...");
             // if all creatures of previous generation died, take DNAs of the best dead creatures from previous generation and randomize the rest
             int halfMaxCount = (int)(CreatureSpawner.instance.creaturesCount * 0.5);
 
-            
             if (prevGeneration != null) {
                 List<DNA> sorted = prevGeneration.GetSortedDNAList();
                 if (sorted.Count > halfMaxCount) {
                     DNAList.AddRange(sorted.GetRange(0, halfMaxCount));
-                    Debug.Log("Added " + halfMaxCount + " best DNAs from previous generation.");
                 } else {
                     DNAList.AddRange(sorted);
-                    Debug.Log("Added " + sorted.Count + " best DNAs from previous generation.");
+                    
                 }
-                
+                Debug.Log("No creatures survived previous generation... Added  best dead DNAs from previous generation. [" + DNAList.Count + "/" + CreatureSpawner.instance.creaturesCount +  "]");
             }
-        
-            // Debug.Log("Added " + DNAList.Count + " best DNAs from past generation.");
-            int count = DNAList.Count;
-            for (int i = 0; i < CreatureSpawner.instance.creaturesCount - count; i++) DNAList.Add(DNA.RandomDNA());
-            Debug.Log("Added " + (CreatureSpawner.instance.creaturesCount - count) + " random DNAs");
         }
     }
 
@@ -87,11 +88,22 @@ public class Generation
     }
 
     public void Reproduction(bool mutate = true) {
-        foreach (DNA dna in new List<DNA>(DNAList)) {
-            DNA reproducedDNA = new DNA(dna); //clone dna, this will be the DNA of a new creature
-            if (mutate) reproducedDNA.Mutate(); //mutate dna
-            DNAList.Add(reproducedDNA); //add new dna to pool
+        List<DNA> reproducedDNAs = new List<DNA>();
+        if (DNAList.Count < 2) { // if one is present, reproduce by itself and mutate
+            DNA reproducedDNA = new DNA(DNAList[0]); 
+            if (mutate) reproducedDNA.Mutate(); 
+            reproducedDNAs.Add(reproducedDNA);
+        } else {
+            for (int i = 0; i < DNAList.Count - 1; i++) {
+                DNA parent1DNA = DNAList[i];
+                DNA parent2DNA = DNAList[i + 1];
+                List<DNA> crossedDNAs = parent1DNA.CrossoverBothWays(parent2DNA);
+                foreach (DNA crossedDNA in crossedDNAs) crossedDNA.Mutate();
+                reproducedDNAs.AddRange(crossedDNAs);
+            }
         }
+        DNAList.AddRange(reproducedDNAs);
+        Debug.Log("Added " + reproducedDNAs.Count + " Offsprings. [" + DNAList.Count + "/" + CreatureSpawner.instance.creaturesCount +  "]");
     }
 
     public void Selection() {
@@ -109,6 +121,7 @@ public class Generation
     }
 
     public void End() {
+        Debug.Log("Ending generation " + number);
         foreach(Creature creature in GameObject.FindObjectsOfType<Creature>()) {
             DNA dna = creature.GetDNA();
             if (dna.score > 0) survivorsDNA.Add(dna);

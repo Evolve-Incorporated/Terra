@@ -89,9 +89,9 @@ public class Creature : MonoBehaviour
         target.gameObject.GetComponent<Food>().Consume();
         dna.score += 1; //foodEnergy;
         target = null;
-        if(energy >= dna.GetReproductionCost()){
-            Reproduce();
-        }
+        // if(energy >= dna.GetReproductionCost()){
+        //     Reproduce();
+        // }
     }
 
     void Move(){
