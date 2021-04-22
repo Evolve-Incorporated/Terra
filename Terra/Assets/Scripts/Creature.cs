@@ -5,16 +5,17 @@ using UnityEngine;
 public class Creature : MonoBehaviour
 {
     [SerializeField]
-    private float speed;
-    [SerializeField]
-    private float range;
-    [SerializeField]
     private float energy;
-    [SerializeField]
-    private float reproduceCost;
-    [SerializeField]
-    private float tendencyToReproduce;
+    public int creatureIndex;
 
+    [SerializeField]
+    public float score = 0;
+
+    [SerializeField]
+    public int id;
+
+    [SerializeField]
+    private DNA dna;
 
     enum State {Waiting, Moving}
     private State actualState;
@@ -32,7 +33,7 @@ public class Creature : MonoBehaviour
         actualState = State.Waiting;
         this.mapInstance = Map.instance;
         creatureSpawnerInstance = CreatureSpawner.instance;
-        InvokeRepeating("UpdateTarget", 0f, 0.5f);
+        InvokeRepeating("UpdateTarget", 0f, 0.01f);
     }
 
     // Update is called once per frame
@@ -46,15 +47,13 @@ public class Creature : MonoBehaviour
             Move();
         }
         
-        energy = energy - Time.deltaTime * 5;
+        BurnEnergy(Time.deltaTime * dna.GetMoveCost());
+
         if(energy <= 0){
             die();
         }
 
-        if(energy >= reproduceCost * tendencyToReproduce){
-            Reproduce();
-        }
-
+        // przenioslem reprodukcje
     }
 
     void TurnAround(){
@@ -84,17 +83,26 @@ public class Creature : MonoBehaviour
         this.nextPosition = new Vector3(nextPossiblePosition.x, nextPossiblePosition.y, transform.position.z);
     }
 
+    void Eat(GameObject target) {
+        float foodEnergy = target.gameObject.GetComponent<Food>().GetEnergy();
+        energy = Mathf.Clamp(energy + foodEnergy, 0 , dna.getGene("maxEnergy")); //// clamp  wartosci energii miedzy 0 - maxEnergy
+        target.gameObject.GetComponent<Food>().Consume();
+        dna.score += 1; //foodEnergy;
+        target = null;
+        // if(energy >= dna.GetReproductionCost()){
+        //     Reproduce();
+        // }
+    }
+
     void Move(){
         Vector3 direction = nextPosition - transform.position;
-        transform.Translate(direction.normalized * speed * Time.deltaTime, Space.World);
+        transform.Translate(direction.normalized * dna.getGene("speed") * Time.deltaTime, Space.World);
 
         if(Vector2.Distance(transform.position, nextPosition) <= 0.2f)
         {
             actualState = State.Waiting;
             if(target && Vector2.Distance(transform.position, target.position) <= 0.2f){
-                energy = energy + target.gameObject.GetComponent<Food>().GetEnergy();
-                target.gameObject.GetComponent<Food>().Consume();
-                target = null;
+                Eat(target.gameObject);
             }
         }
     }
@@ -111,7 +119,7 @@ public class Creature : MonoBehaviour
             }
         }
 
-        if(nearestFood != null && shortestDistance <= range){
+        if(nearestFood != null && shortestDistance <= dna.getGene("range")){
             target = nearestFood.transform;
             this.nextPosition = new Vector3(target.position.x, target.position.y, transform.position.z);
             TurnAround();
@@ -120,32 +128,50 @@ public class Creature : MonoBehaviour
             target = null;
         }
     }
+    
+    void Reproduce() {
+        BurnEnergy(dna.GetReproductionCostAfterDiscount());
+        GameObject creature = creatureSpawnerInstance.SpawnCreature(transform.position, dna);
+        Creature creatureComponent = creature.GetComponent<Creature>();
+        if (UnityEngine.Random.Range(0f, 1f) > GeneticAlgorithm.instance.mutationRate) creatureComponent.Mutate();
+        GeneticAlgorithm.instance.generation.totalAlive += 1;
+    }
 
-    void Reproduce(){
-        /*
-            TO DO
-            Do mutation here
-        */
-
-        CreatureJson creatureJson = new CreatureJson(this.speed, this.range, 50, this.reproduceCost, this.tendencyToReproduce);
-        creatureSpawnerInstance.SpawnCreature(transform.position, creatureJson);
-        energy = energy - reproduceCost;
+    void Mutate() {
+        DNA.MutateCreatureDNA(this);
     }
 
     private void OnDrawGizmosSelected() {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, range);
+        Gizmos.DrawWireSphere(transform.position, dna.getGene("range"));
     }
 
-    private void die(){
+    void BurnEnergy(float amount, string message = null) {
+        if (message != null) Debug.Log(id + ". " + "[" + message + "]" + "Zabrano " + energy + " energii.");
+        energy -= amount;
+    }
+
+    public void die(){
         Destroy(gameObject);
+        GeneticAlgorithm.instance.generation.totalAlive -= 1;
     }
 
-    public void SetStatistics(CreatureJson creatureJson){
-        this.speed = creatureJson.getSpeed();
-        this.range = creatureJson.getRange();
-        this.energy = creatureJson.getEnergy();
-        this.reproduceCost = creatureJson.getReproduceCost();
-        this.tendencyToReproduce = creatureJson.getTendencyToReproduce();
+
+    /// zwiazane z DNA
+
+    public void RefillEnergy() {
+        energy = GetDNA().getGene("maxEnergy");
     }
+
+
+    /// wrappery do DNA
+    public DNA GetDNA() {
+        return dna;
+    }
+
+
+    public void SetDNA(DNA newDNA) {
+        dna = newDNA;
+    }
+
 }

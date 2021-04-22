@@ -216,6 +216,7 @@ GameObject:
   - component: {fileID: 662692548}
   - component: {fileID: 662692547}
   - component: {fileID: 662692545}
+  - component: {fileID: 662692549}
   m_Layer: 0
   m_Name: Map
   m_TagString: Untagged
@@ -235,7 +236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca3a7f901046cf3468a286386547f759, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  creaturesCount: 40
+  creaturesCount: 10
   creatures:
   - {fileID: 4770108447419574286, guid: f4b8603e922db7847aa88a6a8635be41, type: 3}
 --- !u!4 &662692546
@@ -264,7 +265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d26cf505ac9d8c4d8ca21e7f1f6efd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  foodCount: 40
+  foodCount: 15
   foodList:
   - food: {fileID: 5184525876957295959, guid: 3cfb467669b55644e8bc433550b27508, type: 3}
     probability: 8
@@ -282,4 +283,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d59982e4e1e4d345a773155f7008798, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: 30
+  size: 20
+--- !u!114 &662692549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662692544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4de3396c7c1c3ce46b377fb41ae9a4a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mutationRate: 0.1
+  mutationStrength: 0.1
+  percentToPassSelection: 0.5
+  minSelectionCount: 3
+  maxGenerationDurationSeconds: 10
+  globalMoveCostMultiplier: 0.1
