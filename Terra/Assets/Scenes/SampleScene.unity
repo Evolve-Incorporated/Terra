@@ -265,7 +265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d26cf505ac9d8c4d8ca21e7f1f6efd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  foodCount: 8
+  foodCount: 15
   foodList:
   - food: {fileID: 5184525876957295959, guid: 3cfb467669b55644e8bc433550b27508, type: 3}
     probability: 8
@@ -283,7 +283,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d59982e4e1e4d345a773155f7008798, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: 30
+  size: 20
 --- !u!114 &662692549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301,3 +301,4 @@ MonoBehaviour:
   percentToPassSelection: 0.5
   minSelectionCount: 3
   maxGenerationDurationSeconds: 10
+  globalMoveCostMultiplier: 0.1

@@ -42,11 +42,10 @@ public class Generation
     public void Run() {
         Debug.Log("Starting generation " + number);
         AddSurvivors();
-        AddPreviousBest();
         if (number != 0) {
-            //Selection();
             Reproduction();
         }
+        AddPreviousBest();
         ResetDNAScores();
         FillToMaxWithRandom();
         SpawnCreatures();
@@ -75,9 +74,10 @@ public class Generation
 
     public void AddPreviousBest() {
         int count = DNAList.Count;
-        if (prevGeneration != null && DNAList.Count == 0) {
+        if (prevGeneration != null ) { // && DNAList.Count == 0
             //DNAList.AddRange(prevGeneration.DNAList.GetRange(0, Mathf.Min(prevGeneration.DNAList.Count, CreatureSpawner.instance.creaturesCount - count)));
             foreach (DNA dna in prevGeneration.DNAList) {
+                if (DNAList.Count >= CreatureSpawner.instance.creaturesCount) break; // TEMPORARY
                 if (!DNAList.Contains(dna)) DNAList.Add(dna);
             }
             Debug.Log("Added previus best DNAs. [" + DNAList.Count + "/" + CreatureSpawner.instance.creaturesCount +  "]");

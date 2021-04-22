@@ -33,7 +33,7 @@ public class Creature : MonoBehaviour
         actualState = State.Waiting;
         this.mapInstance = Map.instance;
         creatureSpawnerInstance = CreatureSpawner.instance;
-        InvokeRepeating("UpdateTarget", 0f, 0.5f);
+        InvokeRepeating("UpdateTarget", 0f, 0.01f);
     }
 
     // Update is called once per frame

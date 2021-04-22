@@ -15,6 +15,8 @@ public class GeneticAlgorithm : MonoBehaviour
     public int minSelectionCount = 3;
     [SerializeField]
     public float maxGenerationDurationSeconds = 20;
+    [SerializeField]
+    public float globalMoveCostMultiplier = 0.15f;
 
     public Generation generation;
     public static GeneticAlgorithm instance;

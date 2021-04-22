@@ -18,7 +18,7 @@ public class DNA  {
         //key, maxValue
         { "maxEnergy", 5f }, // max energia jaką bedzie miał stworek, na początku jak się go stworzy trzeba bedzie przypisać jego energii tą wartość
         { "speed", 10f }, 
-        { "range", 20f },
+        { "range", 40f },
         //{ "reproductionCost", 1f},
     };
 
@@ -73,7 +73,7 @@ public class DNA  {
     }
 
     public float GetMoveCost() {
-        return 0.2f * (getGene("maxEnergy")*0.5f + getGene("speed")*0.2f + getGene("range")*0.3f);// / getGene("reproductionCost");
+        return GeneticAlgorithm.instance.globalMoveCostMultiplier * (getGene("maxEnergy") + getGene("speed") + getGene("range")*0.5f);// / getGene("reproductionCost");
     }
 
     public Dictionary<string, float> getGenes() {
