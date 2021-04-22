@@ -5,25 +5,38 @@ using System.Linq;
 using System;
 public class Generation
 {
-    
-    public static int maxDurationSeconds = 20;
-
 
     public List<DNA> DNAList = new List<DNA>();
     public List<DNA> survivorsDNA = new List<DNA>();
     public int number = 0;
+    public float startTime;
 
     public int totalAlive = 0;
     Generation prevGeneration = null;
 
 
     public Generation() {}
+
     public Generation(List<DNA> dnalist) {
         DNAList = dnalist;
     }
+
     public Generation(Generation generation) {
         number = generation.number + 1;
         prevGeneration = generation;
+    }
+
+    public bool IsAlive() {
+        return totalAlive != 0;
+    }
+
+    public float TimeElapsed() {
+        // if (startTime == null) throw
+        return Time.time - startTime;
+    }
+
+    public void SetStartTime(float time = -1) {
+        startTime = time != -1 ? time : Time.time; 
     }
 
     public void Run() {
@@ -36,6 +49,7 @@ public class Generation
         fillDNAList();
         ResetDNAScores();
         SpawnCreatures();
+        SetStartTime();
     }
 
 
@@ -56,7 +70,6 @@ public class Generation
 
     public void LoadDNAList() {
         if (prevGeneration != null) {
-            prevGeneration.FilterZeroDNAs();
             if (prevGeneration.survivorsDNA.Count > 0) {
                 DNAList = prevGeneration.survivorsDNA;
                 Debug.Log("Selected " + DNAList.Count + " survivor DNAs to pass to next generation. Best score was: " + prevGeneration.GetSortedDNAList()[0].score);
@@ -69,11 +82,10 @@ public class Generation
             int halfMaxCount = (int)(CreatureSpawner.instance.creaturesCount * 0.5);
 
             if (prevGeneration != null) {
-                List<DNA> sorted = prevGeneration.GetSortedDNAList();
-                if (sorted.Count > halfMaxCount) {
-                    DNAList.AddRange(sorted.GetRange(0, halfMaxCount));
+                if (prevGeneration.DNAList.Count > halfMaxCount) {
+                    DNAList.AddRange(prevGeneration.DNAList.GetRange(0, halfMaxCount));
                 } else {
-                    DNAList.AddRange(sorted);
+                    DNAList.AddRange(prevGeneration.DNAList);
                     
                 }
                 Debug.Log("No creatures survived previous generation... Added  best dead DNAs from previous generation. [" + DNAList.Count + "/" + CreatureSpawner.instance.creaturesCount +  "]");
@@ -89,11 +101,11 @@ public class Generation
 
     public void Reproduction(bool mutate = true) {
         List<DNA> reproducedDNAs = new List<DNA>();
-        if (DNAList.Count < 2) { // if one is present, reproduce by itself and mutate
+        if (DNAList.Count < 2 && DNAList.Count > 0) { // if one is present, reproduce by itself and mutate
             DNA reproducedDNA = new DNA(DNAList[0]); 
             if (mutate && UnityEngine.Random.Range(0f, 1f) >= GeneticAlgorithm.instance.mutationRate) reproducedDNA.Mutate(); 
             reproducedDNAs.Add(reproducedDNA);
-        } else {
+        } else if (DNAList.Count >= 2) {
             for (int i = 0; i < DNAList.Count - 1; i++) {
                 DNA parent1DNA = DNAList[i];
                 DNA parent2DNA = DNAList[i + 1];
@@ -107,6 +119,8 @@ public class Generation
     }
 
     public void Selection() {
+        if (DNAList.Count < GeneticAlgorithm.instance.minSelectionCount) return;
+
         int selectionSize = (int) Mathf.Ceil(DNAList.Count * GeneticAlgorithm.instance.percentToPassSelection);
         if (selectionSize <= 0) {
             throw new IndexOutOfRangeException("Something went wrong..");
@@ -125,11 +139,11 @@ public class Generation
         foreach(Creature creature in GameObject.FindObjectsOfType<Creature>()) {
             DNA dna = creature.GetDNA();
             if (dna.score > 0) survivorsDNA.Add(dna);
-            
             creature.die();
             prevGeneration = null; // chyba performance boost
         }
-        
+        FilterZeroDNAs();
+        DNAList = GetSortedDNAList();
     }
 
     public Generation Next() {

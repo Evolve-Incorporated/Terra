@@ -11,7 +11,11 @@ public class GeneticAlgorithm : MonoBehaviour
     public float mutationStrength = 0.1f;
     [SerializeField]
     public float percentToPassSelection = 0.5f;
-    
+    [SerializeField]
+    public int minSelectionCount = 3;
+    [SerializeField]
+    public float maxGenerationDurationSeconds = 20;
+
     public Generation generation;
     public static GeneticAlgorithm instance;
     // Start is called before the first frame update
@@ -42,7 +46,11 @@ public class GeneticAlgorithm : MonoBehaviour
     void Update()
     {
         //check if generation is done
-        if (generation.totalAlive == 0) {
+        bool timeIsUp = generation.TimeElapsed() >= maxGenerationDurationSeconds;
+        if (!generation.IsAlive() || timeIsUp) {
+            if (timeIsUp) Debug.Log("Generation reached it's max lifetime.");
+            else Debug.Log("Generation died.");
+
             generation.End();
             generation = generation.Next();
             generation.Run();
