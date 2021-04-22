@@ -130,16 +130,11 @@ public class Creature : MonoBehaviour
     }
     
     void Reproduce() {
-        //Debug.Log(id + ". Reproducing");
         BurnEnergy(dna.GetReproductionCostAfterDiscount());
-
         GameObject creature = creatureSpawnerInstance.SpawnCreature(transform.position, dna);
-
         Creature creatureComponent = creature.GetComponent<Creature>();
-        creatureComponent.Mutate();
+        if (UnityEngine.Random.Range(0f, 1f) > GeneticAlgorithm.instance.mutationRate) creatureComponent.Mutate();
         GeneticAlgorithm.instance.generation.totalAlive += 1;
-        //Debug.Log("Reproducing:\n" + dna + "\nEnergy: " + energy + "\n\nInto:\n" + creatureComponent.GetDNA() + "\nEnergy: " + creatureComponent.energy);
-        //Debug.Log(creatureComponent.id + "." + " New creature energy: " + creatureComponent.energy);
     }
 
     void Mutate() {

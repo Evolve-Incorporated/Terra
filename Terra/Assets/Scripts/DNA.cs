@@ -19,8 +19,7 @@ public class DNA  {
         { "maxEnergy", 5f }, // max energia jaką bedzie miał stworek, na początku jak się go stworzy trzeba bedzie przypisać jego energii tą wartość
         { "speed", 10f }, 
         { "range", 20f },
-        { "reproductionCost", 1f},
-        { "mutationRange", 0.1f}
+        //{ "reproductionCost", 1f},
     };
 
     [SerializeField]
@@ -74,7 +73,7 @@ public class DNA  {
     }
 
     public float GetMoveCost() {
-        return 0.2f * (getGene("maxEnergy")*0.5f + getGene("speed")*0.2f + getGene("range")*0.3f);// / getGene("reproductionCost"); // tu trzeba uwzglednic jescze jakos maxEnergy bo jak to nie przyczynia sie do zwiekszenia kosztu to kazdy stworek bedzie dazyl do maksymalnej wartosci
+        return 0.2f * (getGene("maxEnergy")*0.5f + getGene("speed")*0.2f + getGene("range")*0.3f);// / getGene("reproductionCost");
     }
 
     public Dictionary<string, float> getGenes() {
@@ -84,10 +83,10 @@ public class DNA  {
     public void Mutate() {
         // Narazie wszystko mutuje, potem mozna zrobic tak ze losowe geny mutują
 
-
+        int nGenesToMutate = Mathf.Max(1, (int) UnityEngine.Random.Range(0f, (float) Mathf.Ceil(genes.Keys.Count * 0.51f)));
         List<string> genesToMutate = (new List<string>(genes.Keys))
                                         .OrderBy(x => UnityEngine.Random.Range(0f, 1f))
-                                        .Take( (int) UnityEngine.Random.Range(0f, (float) Mathf.Ceil(genes.Keys.Count * 0.51f)) )
+                                        .Take(nGenesToMutate)
                                         .ToList();
 
 
@@ -95,7 +94,7 @@ public class DNA  {
         foreach (string key in genesToMutate) {
             //float[] range = DNA_RANGES[key];
 
-            float mutation = genes[key] * ( 1 + (getGene("mutationRange") * UnityEngine.Random.Range(0,2)*2-1));
+            float mutation = genes[key] * ( 1 + (GeneticAlgorithm.instance.mutationStrength * UnityEngine.Random.Range(0,2)*2-1));
             //info += "\n" + "    Muating: " + key + "From: " + genes[key].ToString() + " To: " +  (genes[key] + mutation);
             genes[key] = Mathf.Clamp(mutation, 0f, 1f); // tymczasowe rozwiazanie zeby np reproduction cost nie spadlo do 0, nie wiem czy sposob obliczania kosztu energii podczas Move() jest na tyle ogarniety zeby nie dopuscic do takiej sytuacji
         }

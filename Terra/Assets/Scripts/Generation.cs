@@ -5,7 +5,7 @@ using System.Linq;
 using System;
 public class Generation
 {
-    public static float percentToPassSelection = 0.5f;
+    
     public static int maxDurationSeconds = 20;
 
 
@@ -91,7 +91,7 @@ public class Generation
         List<DNA> reproducedDNAs = new List<DNA>();
         if (DNAList.Count < 2) { // if one is present, reproduce by itself and mutate
             DNA reproducedDNA = new DNA(DNAList[0]); 
-            if (mutate) reproducedDNA.Mutate(); 
+            if (mutate && UnityEngine.Random.Range(0f, 1f) >= GeneticAlgorithm.instance.mutationRate) reproducedDNA.Mutate(); 
             reproducedDNAs.Add(reproducedDNA);
         } else {
             for (int i = 0; i < DNAList.Count - 1; i++) {
@@ -107,7 +107,7 @@ public class Generation
     }
 
     public void Selection() {
-        int selectionSize = (int) Mathf.Ceil(DNAList.Count * percentToPassSelection);
+        int selectionSize = (int) Mathf.Ceil(DNAList.Count * GeneticAlgorithm.instance.percentToPassSelection);
         if (selectionSize <= 0) {
             throw new IndexOutOfRangeException("Something went wrong..");
         }

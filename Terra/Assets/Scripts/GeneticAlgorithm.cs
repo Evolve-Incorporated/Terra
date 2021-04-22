@@ -6,6 +6,12 @@ using UnityEngine;
 public class GeneticAlgorithm : MonoBehaviour
 {
     [SerializeField]
+    public float mutationRate = 0.1f;
+    [SerializeField]
+    public float mutationStrength = 0.1f;
+    [SerializeField]
+    public float percentToPassSelection = 0.5f;
+    
     public Generation generation;
     public static GeneticAlgorithm instance;
     // Start is called before the first frame update
