@@ -265,7 +265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d26cf505ac9d8c4d8ca21e7f1f6efd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  foodCount: 5
+  foodCount: 8
   foodList:
   - food: {fileID: 5184525876957295959, guid: 3cfb467669b55644e8bc433550b27508, type: 3}
     probability: 8
