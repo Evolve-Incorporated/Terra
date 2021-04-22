@@ -622,11 +622,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 255556d5e962d1f4b9682c548bf8f256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 6
-  range: 3
-  energy: 40
-  reproduceCost: 50
-  tendencyToReproduce: 1.1
+  energy: 0
   target: {fileID: 0}
 --- !u!1 &4770201108060966360
 GameObject:
