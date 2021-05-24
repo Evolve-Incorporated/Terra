@@ -62,6 +62,10 @@ public class FoodSpawner : MonoBehaviour
         float randomYPosition = Random.Range(this.mapInstance.gridPosition["bottom"], this.mapInstance.gridPosition["top"]);
         food.transform.position = new Vector3(randomXPosition, randomYPosition, food.transform.position.z);
     }
+
+    public void setCount(int count){
+        this.foodCount = count;
+    }
     
 
 }

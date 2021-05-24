@@ -98,4 +98,8 @@ public class CreatureSpawner : MonoBehaviour
 
         return creature;
     }
+
+    public void setCount(int count){
+        this.creaturesCount = count;
+    }
 }

@@ -1,0 +1,100 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8563127617275476637
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8563127617275476639}
+  - component: {fileID: 8563127617275476633}
+  - component: {fileID: 8563127617275476638}
+  - component: {fileID: 8563127617275476636}
+  - component: {fileID: 8563127617275476632}
+  m_Layer: 0
+  m_Name: Map
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8563127617275476639
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8563127617275476637}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8563127617275476633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8563127617275476637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d59982e4e1e4d345a773155f7008798, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  size: 20
+--- !u!114 &8563127617275476638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8563127617275476637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d26cf505ac9d8c4d8ca21e7f1f6efd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  foodCount: 15
+  foodList:
+  - food: {fileID: 5184525876957295959, guid: 3cfb467669b55644e8bc433550b27508, type: 3}
+    probability: 8
+  - food: {fileID: 4455846206429798338, guid: 78fcb1fde7dcd514eb788d115cfe64f4, type: 3}
+    probability: 5
+--- !u!114 &8563127617275476636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8563127617275476637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca3a7f901046cf3468a286386547f759, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  creaturesCount: 10
+  creatures:
+  - {fileID: 4770108447419574286, guid: f4b8603e922db7847aa88a6a8635be41, type: 3}
+--- !u!114 &8563127617275476632
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8563127617275476637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4de3396c7c1c3ce46b377fb41ae9a4a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mutationRate: 0.1
+  mutationStrength: 0.1
+  percentToPassSelection: 0.5
+  minSelectionCount: 3
+  maxGenerationDurationSeconds: 10
+  globalMoveCostMultiplier: 0.1

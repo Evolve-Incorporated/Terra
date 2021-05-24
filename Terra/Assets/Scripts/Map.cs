@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Map : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class Map : MonoBehaviour
     private int size;
 
     public static Map instance;
+    public Button endSimulationButton;
     public Dictionary<string, float> gridPosition;
 
     void Awake(){
@@ -19,6 +21,7 @@ public class Map : MonoBehaviour
         instance = this;
         GenerateGrid();
         SetGridPosition();
+
     }
 
     // Start is called before the first frame update
@@ -68,5 +71,9 @@ public class Map : MonoBehaviour
     private void SetCamera(){
        Camera.main.transform.position = new Vector3(this.gridPosition["xCenter"], this.gridPosition["yCenter"], -10);
        Camera.main.orthographicSize = gridPosition["height"] * 2 / 3;
+    }
+
+    public void setSize(int size){
+        this.size = size;
     }
 }
