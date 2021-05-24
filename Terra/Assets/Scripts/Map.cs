@@ -69,4 +69,8 @@ public class Map : MonoBehaviour
        Camera.main.transform.position = new Vector3(this.gridPosition["xCenter"], this.gridPosition["yCenter"], -10);
        Camera.main.orthographicSize = gridPosition["height"] * 2 / 3;
     }
+
+    public void setSize(int size){
+        this.size = size;
+    }
 }
