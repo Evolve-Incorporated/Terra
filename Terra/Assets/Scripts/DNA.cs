@@ -6,27 +6,27 @@ using System.Linq;
 [Serializable]
 public class DNA  {
 
-    
+
     public static Dictionary<string, float> DNA_RANGES = new Dictionary<string, float>() // to są wartości minimalne i maksymalne genów z których będzie losowane
     {
         // { "maxEnergy", new float[] {0f, 1000f} }, // max energia jaką bedzie miał stworek, na początku jak się go stworzy trzeba bedzie przypisać jego energii tą wartość
-        // { "speed", new float[] {0f, 10f} }, 
+        // { "speed", new float[] {0f, 10f} },
         // { "range", new float[] {0f, 10f} },
         // { "reproductionCost", new float[] {0f, 1f} }, // to będzie w formie procentu maxEnergy, czyli np jesli stworek ma max energy 100 a reproductionCost 0.5 to bedzie musial miec 50 energii zeby sie rozmnozyc
-        
-        
+
+
         //key, maxValue
         { "maxEnergy", 5f }, // max energia jaką bedzie miał stworek, na początku jak się go stworzy trzeba bedzie przypisać jego energii tą wartość
-        { "speed", 10f }, 
+        { "speed", 10f },
         { "range", 40f },
-        //{ "reproductionCost", 1f},
+        { "reproductionCost", 1f},
     };
 
     [SerializeField]
     public static float reproductionDiscount = 0.3f;
 
     public Dictionary<string, float> genes = new Dictionary<string, float>();
-    public float score = 0;    
+    public float score = 0;
 
     public static void MutateCreatureDNA(Creature creature) { // mozna to zmienic na np. MutateCreatureDNA(DNA dna), tak samo inne statyczne
         creature.GetDNA().Mutate();
@@ -40,8 +40,8 @@ public class DNA  {
         creature.GetDNA().SetGenes(dna.getGenes());
     }
 
- 
-    public static DNA RandomDNA() { 
+
+    public static DNA RandomDNA() {
         return (new DNA()).SetGenes();
     }
 
@@ -57,7 +57,7 @@ public class DNA  {
     }
 
     public float getGene(string gene) {
-        return genes[gene] * DNA_RANGES[gene];
+        return genes[gene] * (DNA_RANGES.ContainsKey(gene) ? DNA_RANGES[gene] : 1f);
     }
 
     public void SetGene(string gene, float value) {
@@ -105,7 +105,7 @@ public class DNA  {
     public DNA Crossover(DNA sourceDNA, float ratio = 0.5f) {
         DNA crossedDNA = new DNA();
         int splitSize = (int) Mathf.Round(genes.Keys.Count * ratio);
-        
+
         int i = 0;
         foreach (string gene in genes.Keys) {
             if (i <= splitSize) crossedDNA.SetGene(gene, genes[gene]);

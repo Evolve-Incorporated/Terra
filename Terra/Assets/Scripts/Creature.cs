@@ -5,7 +5,7 @@ using UnityEngine;
 public class Creature : MonoBehaviour
 {
     [SerializeField]
-    private float energy;
+    public float energy;
     public int creatureIndex;
 
     [SerializeField]
@@ -15,7 +15,8 @@ public class Creature : MonoBehaviour
     public int id;
 
     [SerializeField]
-    private DNA dna;
+    public DNA dna = new DNA();
+
 
     enum State {Waiting, Moving}
     private State actualState;
@@ -46,7 +47,7 @@ public class Creature : MonoBehaviour
         }else if(actualState == State.Moving){
             Move();
         }
-        
+
         BurnEnergy(Time.deltaTime * dna.GetMoveCost());
 
         if(energy <= 0){
@@ -85,13 +86,17 @@ public class Creature : MonoBehaviour
 
     void Eat(GameObject target) {
         float foodEnergy = target.gameObject.GetComponent<Food>().GetEnergy();
-        energy = Mathf.Clamp(energy + foodEnergy, 0 , dna.getGene("maxEnergy")); //// clamp  wartosci energii miedzy 0 - maxEnergy
+        CommitEnergy(foodEnergy);
         target.gameObject.GetComponent<Food>().Consume();
-        dna.score += 1; //foodEnergy;
         target = null;
         // if(energy >= dna.GetReproductionCost()){
         //     Reproduce();
         // }
+    }
+
+    public void CommitEnergy(float energy) {
+        this.energy = Mathf.Clamp(this.energy + energy, 0 , dna.getGene("maxEnergy")); //// clamp  wartosci energii miedzy 0 - maxEnergy
+        dna.score += 1;
     }
 
     void Move(){
@@ -128,7 +133,7 @@ public class Creature : MonoBehaviour
             target = null;
         }
     }
-    
+
     void Reproduce() {
         BurnEnergy(dna.GetReproductionCostAfterDiscount());
         GameObject creature = creatureSpawnerInstance.SpawnCreature(transform.position, dna);
@@ -146,7 +151,7 @@ public class Creature : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, dna.getGene("range"));
     }
 
-    void BurnEnergy(float amount, string message = null) {
+    public void BurnEnergy(float amount, string message = null) {
         if (message != null) Debug.Log(id + ". " + "[" + message + "]" + "Zabrano " + energy + " energii.");
         energy -= amount;
     }

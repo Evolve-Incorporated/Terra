@@ -1,12 +1,18 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Food : MonoBehaviour
 {
+    public Food(Food other)
+    {
+        this.energy = other.energy;
+        this.probability = other.probability;
+    }
+
 
     [SerializeField]
-    private float energy;
+    public float energy;
     [SerializeField]
     private float probability;
 
