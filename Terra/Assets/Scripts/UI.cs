@@ -18,8 +18,8 @@ public class UI : MonoBehaviour
     public void StartSimulation(){
         GameObject map = game.transform.GetChild(1).gameObject;
         map.GetComponent<Map>().setSize((int)MapSizeSlider.value);
-        map.GetComponent<FoodSpawner>().setCount((int)PopulationCountSlider.value);
-        map.GetComponent<CreatureSpawner>().setCount((int)FoodCountSlider.value);
+        map.GetComponent<FoodSpawner>().setCount((int)FoodCountSlider.value);
+        map.GetComponent<CreatureSpawner>().setCount((int)PopulationCountSlider.value);
         Instantiate(game, new Vector3(0, 0, 0), Quaternion.identity);
         Destroy(gameObject);
     }

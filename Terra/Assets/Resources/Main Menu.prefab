@@ -790,17 +790,17 @@ PrefabInstance:
     - target: {fileID: 5924717286706242931, guid: b573c9c130ea34495bfe74f5e6c55792,
         type: 3}
       propertyPath: m_Value
-      value: 30
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 5924717286706242931, guid: b573c9c130ea34495bfe74f5e6c55792,
         type: 3}
       propertyPath: m_MaxValue
-      value: 50
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 5924717286706242931, guid: b573c9c130ea34495bfe74f5e6c55792,
         type: 3}
       propertyPath: m_MinValue
-      value: 30
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 5924717286706242931, guid: b573c9c130ea34495bfe74f5e6c55792,
         type: 3}
