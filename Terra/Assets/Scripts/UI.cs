@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class UI : MonoBehaviour
 {
 
-    public GameObject map;
+    public GameObject game;
     public Slider MapSizeSlider;
     public Slider PopulationCountSlider;
     public Slider FoodCountSlider;
@@ -16,10 +16,11 @@ public class UI : MonoBehaviour
     }
 
     public void StartSimulation(){
-        this.map.GetComponent<Map>().setSize((int)MapSizeSlider.value);
-        this.map.GetComponent<FoodSpawner>().setCount((int)PopulationCountSlider.value);
-        this.map.GetComponent<CreatureSpawner>().setCount((int)FoodCountSlider.value);
-        Instantiate(map, new Vector3(0, 0, 0), Quaternion.identity);
+        GameObject map = game.transform.GetChild(1).gameObject;
+        map.GetComponent<Map>().setSize((int)MapSizeSlider.value);
+        map.GetComponent<FoodSpawner>().setCount((int)PopulationCountSlider.value);
+        map.GetComponent<CreatureSpawner>().setCount((int)FoodCountSlider.value);
+        Instantiate(game, new Vector3(0, 0, 0), Quaternion.identity);
         Destroy(gameObject);
     }
 }
