@@ -7,6 +7,7 @@ public class UI : MonoBehaviour
 {
 
     public GameObject game;
+    public GameObject menu;
     public Slider MapSizeSlider;
     public Slider PopulationCountSlider;
     public Slider FoodCountSlider;
@@ -22,5 +23,10 @@ public class UI : MonoBehaviour
         map.GetComponent<CreatureSpawner>().setCount((int)PopulationCountSlider.value);
         Instantiate(game, new Vector3(0, 0, 0), Quaternion.identity);
         Destroy(gameObject);
+    }
+
+    public void endSimulation(){
+        Destroy(game);
+        Instantiate(menu, new Vector3(0, 0, 0), Quaternion.identity);
     }
 }

@@ -88,6 +88,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1456525764766434957}
   - component: {fileID: 304476291}
+  - component: {fileID: 2456206757718038538}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -124,6 +125,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 1456525765442573185}
+--- !u!114 &2456206757718038538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1456525764766434946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a1688f6333e8b74bbee4415cc52ebe4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  game: {fileID: 1456525764766434946}
+  menu: {fileID: 3543116527599666205, guid: bdf0b038dbab7d14895ce6bb0972993b, type: 3}
+  MapSizeSlider: {fileID: 0}
+  PopulationCountSlider: {fileID: 0}
+  FoodCountSlider: {fileID: 0}
 --- !u!1 &1456525765432349678
 GameObject:
   m_ObjectHideFlags: 0
@@ -242,7 +260,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1456525765432349675}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2456206757718038538}
+        m_MethodName: endSimulation
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1456525765442573189
 GameObject:
   m_ObjectHideFlags: 0
@@ -483,7 +512,7 @@ PrefabInstance:
     - target: {fileID: 8563127617275476633, guid: 406219cbfb554934b885e1d45cb97c45,
         type: 3}
       propertyPath: size
-      value: 30
+      value: 37
       objectReference: {fileID: 0}
     - target: {fileID: 8563127617275476633, guid: 406219cbfb554934b885e1d45cb97c45,
         type: 3}
@@ -494,7 +523,7 @@ PrefabInstance:
     - target: {fileID: 8563127617275476636, guid: 406219cbfb554934b885e1d45cb97c45,
         type: 3}
       propertyPath: creaturesCount
-      value: 30
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8563127617275476637, guid: 406219cbfb554934b885e1d45cb97c45,
         type: 3}
@@ -504,7 +533,7 @@ PrefabInstance:
     - target: {fileID: 8563127617275476638, guid: 406219cbfb554934b885e1d45cb97c45,
         type: 3}
       propertyPath: foodCount
-      value: 1
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 8563127617275476639, guid: 406219cbfb554934b885e1d45cb97c45,
         type: 3}
