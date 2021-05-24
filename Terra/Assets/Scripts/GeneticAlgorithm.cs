@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GeneticAlgorithm : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class GeneticAlgorithm : MonoBehaviour
     public float maxGenerationDurationSeconds = 20;
     [SerializeField]
     public float globalMoveCostMultiplier = 0.15f;
+
+    public Text highscoreText;
 
     public Generation generation;
     public static GeneticAlgorithm instance;
@@ -54,9 +57,15 @@ public class GeneticAlgorithm : MonoBehaviour
             else Debug.Log("Generation died.");
 
             generation.End();
+            SetHighscore();
             generation = generation.Next();
             generation.Run();
         } 
         
+    }
+
+    public void SetHighscore(){
+        List<DNA> DNAList = generation.GetSortedDNAList();
+        highscoreText.text = DNAList[0].score.ToString();
     }
 }
